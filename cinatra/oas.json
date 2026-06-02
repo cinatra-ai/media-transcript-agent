@@ -1,0 +1,268 @@
+{
+  "agentspec_version": "26.1.0",
+  "component_type": "Flow",
+  "id": "media-transcript-flow",
+  "name": "Media Transcript Agent",
+  "description": "Transcribes audio/video URLs (including YouTube) to text with [Speaker N]: speaker-label markers. Single ApiNode → /api/llm-bridge; provider routing (Gemini) declared via metadata.cinatra.llm.",
+  "metadata": {
+    "cinatra": {
+      "type": "flow",
+      "packageName": "@cinatra-ai/media-transcript-agent",
+      "packageVersion": "0.1.3",
+      "hitlScreens": [],
+      "llm": {
+        "preferredProvider": "gemini",
+        "preferredModel": "gemini-2.5-flash",
+        "capabilityRequired": "media_input"
+      }
+    }
+  },
+  "inputs": [
+    {
+      "title": "mediaUrl",
+      "type": "string"
+    },
+    {
+      "title": "title",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "title": "description",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "title": "kind",
+      "type": "string",
+      "default": ""
+    }
+  ],
+  "outputs": [
+    {
+      "title": "transcript",
+      "type": "string"
+    },
+    {
+      "title": "kind",
+      "type": "string"
+    }
+  ],
+  "start_node": {
+    "$component_ref": "start"
+  },
+  "nodes": [
+    {
+      "$component_ref": "start"
+    },
+    {
+      "$component_ref": "call_bridge"
+    },
+    {
+      "$component_ref": "end"
+    }
+  ],
+  "control_flow_connections": [
+    {
+      "component_type": "ControlFlowEdge",
+      "name": "start_to_call_bridge",
+      "from_node": {
+        "$component_ref": "start"
+      },
+      "to_node": {
+        "$component_ref": "call_bridge"
+      }
+    },
+    {
+      "component_type": "ControlFlowEdge",
+      "name": "call_bridge_to_end",
+      "from_node": {
+        "$component_ref": "call_bridge"
+      },
+      "to_node": {
+        "$component_ref": "end"
+      }
+    }
+  ],
+  "data_flow_connections": [
+    {
+      "component_type": "DataFlowEdge",
+      "name": "start_mediaUrl_to_call_bridge",
+      "source_node": {
+        "$component_ref": "start"
+      },
+      "source_output": "mediaUrl",
+      "destination_node": {
+        "$component_ref": "call_bridge"
+      },
+      "destination_input": "mediaUrl"
+    },
+    {
+      "component_type": "DataFlowEdge",
+      "name": "start_title_to_call_bridge",
+      "source_node": {
+        "$component_ref": "start"
+      },
+      "source_output": "title",
+      "destination_node": {
+        "$component_ref": "call_bridge"
+      },
+      "destination_input": "title"
+    },
+    {
+      "component_type": "DataFlowEdge",
+      "name": "start_description_to_call_bridge",
+      "source_node": {
+        "$component_ref": "start"
+      },
+      "source_output": "description",
+      "destination_node": {
+        "$component_ref": "call_bridge"
+      },
+      "destination_input": "description"
+    },
+    {
+      "component_type": "DataFlowEdge",
+      "name": "start_kind_to_call_bridge",
+      "source_node": {
+        "$component_ref": "start"
+      },
+      "source_output": "kind",
+      "destination_node": {
+        "$component_ref": "call_bridge"
+      },
+      "destination_input": "kind"
+    },
+    {
+      "component_type": "DataFlowEdge",
+      "name": "call_bridge_text_to_end_transcript",
+      "source_node": {
+        "$component_ref": "call_bridge"
+      },
+      "source_output": "text",
+      "destination_node": {
+        "$component_ref": "end"
+      },
+      "destination_input": "transcript"
+    },
+    {
+      "component_type": "DataFlowEdge",
+      "name": "start_kind_to_end_kind",
+      "source_node": {
+        "$component_ref": "start"
+      },
+      "source_output": "kind",
+      "destination_node": {
+        "$component_ref": "end"
+      },
+      "destination_input": "kind"
+    }
+  ],
+  "$referenced_components": {
+    "start": {
+      "component_type": "StartNode",
+      "id": "start",
+      "name": "Inputs",
+      "metadata": {
+        "cinatra": {
+          "required": [
+            "mediaUrl"
+          ],
+          "hidden": [
+            "title",
+            "description",
+            "kind"
+          ]
+        }
+      },
+      "inputs": [
+        {
+          "title": "mediaUrl",
+          "type": "string"
+        },
+        {
+          "title": "title",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "title": "description",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "title": "kind",
+          "type": "string",
+          "default": ""
+        }
+      ]
+    },
+    "call_bridge": {
+      "component_type": "ApiNode",
+      "id": "call_bridge",
+      "name": "Transcribe via /api/llm-bridge",
+      "url": "{{CINATRA_BASE_URL}}/api/llm-bridge",
+      "http_method": "POST",
+      "data": {
+        "user": "{# pyagentspec-input-hint (do not remove): {{ title }} {{ description }} #}Transcribe the media at {{ mediaUrl }}.{{ ' Title: ' + title if title else '' }}{{ ' Context: ' + description if description else '' }}",
+        "agent_id": "media-transcript-agent",
+        "media": {
+          "url": "{{ mediaUrl }}",
+          "kind": "{{ kind }}"
+        },
+        "cinatra_llm": {
+          "preferredProvider": "gemini",
+          "preferredModel": "gemini-2.5-flash",
+          "capabilityRequired": "media_input"
+        }
+      },
+      "inputs": [
+        {
+          "title": "mediaUrl",
+          "type": "string"
+        },
+        {
+          "title": "title",
+          "type": "string"
+        },
+        {
+          "title": "description",
+          "type": "string"
+        },
+        {
+          "title": "kind",
+          "type": "string"
+        }
+      ],
+      "outputs": [
+        {
+          "title": "text",
+          "type": "string"
+        }
+      ],
+      "metadata": {
+        "cinatra": {
+          "riskClass": "read_only",
+          "requiresApproval": false,
+          "packageName": "@cinatra-ai/media-transcript-agent",
+          "description": "Single ApiNode → /api/llm-bridge. Branching (YouTube URL-as-text vs file upload) happens in the bridge. The cinatra_llm block is injected by the oas-compiler (injectCinatraLlmIntoApiNodes) at compile time. The hidden StartNode inputs `title`/`description`/`kind` carry `default: \"\"` so callers can dispatch with only `mediaUrl`. The bridge schema still normalizes empty/null to undefined for the Zod media kind enum — defaults guarantee the value flows; bridge normalization handles the empty-string semantic. Strict `start_conversation(inputs=...)` validation requires defaults because the dispatcher passes StartNode inputs explicitly, while undefined StartNode inputs render to empty strings through Jinja."
+        }
+      }
+    },
+    "end": {
+      "component_type": "EndNode",
+      "id": "end",
+      "name": "End",
+      "outputs": [
+        {
+          "title": "transcript",
+          "type": "string"
+        },
+        {
+          "title": "kind",
+          "type": "string"
+        }
+      ]
+    }
+  }
+}
