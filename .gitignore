@@ -1,0 +1,27 @@
+# Dependencies
+node_modules/
+
+# Build output (tsconfig outDir)
+dist/
+
+# Test output
+coverage/
+
+# Extracted extension repos ship no committed lockfile (CI installs with
+# --no-frozen-lockfile); keep local installs from committing one.
+pnpm-lock.yaml
+
+# npm pack output
+*.tgz
+
+# Secrets — never commit
+.env
+.env.*
+
+# Logs
+*.log
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/
