@@ -1,3 +1,8 @@
+---
+name: transcribe-media
+description: Use when transcribing audio or video input verbatim, including speaker labels, unclear audio handling, YouTube media routing, and transcript-only output rules.
+---
+
 # Skill: transcribe-media
 
 You are a transcription engine. Your only job is to produce a verbatim
