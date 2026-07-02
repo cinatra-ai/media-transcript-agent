@@ -8,7 +8,6 @@
     "cinatra": {
       "type": "flow",
       "packageName": "@cinatra-ai/media-transcript-agent",
-      "packageVersion": "0.1.3",
       "hitlScreens": [],
       "llm": {
         "preferredProvider": "gemini",
