@@ -45,6 +45,10 @@
     {
       "title": "kind",
       "type": "string"
+    },
+    {
+      "title": "mediaUrl",
+      "type": "string"
     }
   ],
   "start_node": {
@@ -155,6 +159,18 @@
         "$component_ref": "end"
       },
       "destination_input": "kind"
+    },
+    {
+      "component_type": "DataFlowEdge",
+      "name": "start_mediaUrl_to_end_mediaUrl",
+      "source_node": {
+        "$component_ref": "start"
+      },
+      "source_output": "mediaUrl",
+      "destination_node": {
+        "$component_ref": "end"
+      },
+      "destination_input": "mediaUrl"
     }
   ],
   "$referenced_components": {
@@ -255,10 +271,22 @@
       "outputs": [
         {
           "title": "transcript",
-          "type": "string"
+          "type": "string",
+          "cinatra": {
+            "artifact": {
+              "extension": "@cinatra-ai/default-artifact",
+              "contentFrom": "transcript",
+              "declaredMime": "text/plain",
+              "titleFrom": "mediaUrl"
+            }
+          }
         },
         {
           "title": "kind",
+          "type": "string"
+        },
+        {
+          "title": "mediaUrl",
           "type": "string"
         }
       ]
