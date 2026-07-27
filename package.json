@@ -1,12 +1,11 @@
 {
   "name": "@cinatra-ai/media-transcript-agent",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "license": "Apache-2.0",
   "description": "Transcribes audio or video URLs (including YouTube watch URLs) to text with [Speaker N]: markers. Routes via /api/llm-bridge to Gemini (preferredProvider in OAS metadata).",
   "type": "module",
   "files": [
-    "cinatra",
-    "skills"
+    "cinatra"
   ],
   "cinatra": {
     "apiVersion": "cinatra.ai/v1",
