@@ -275,7 +275,7 @@
           "type": "string",
           "cinatra": {
             "artifact": {
-              "extension": "@cinatra-ai/default-artifact",
+              "extension": "@cinatra-ai/text-artifact",
               "contentFrom": "transcript",
               "declaredMime": "text/plain",
               "titleFrom": "mediaUrl"

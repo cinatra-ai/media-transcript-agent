@@ -11,7 +11,18 @@
     "apiVersion": "cinatra.ai/v1",
     "kind": "agent",
     "displayName": "Media Transcript Agent",
-    "dependencies": [],
+    "dependencies": [
+      {
+        "packageName": "@cinatra-ai/text-artifact",
+        "edgeType": "runtime",
+        "versionConstraint": {
+          "kind": "semver-range",
+          "range": "^0.1.0"
+        },
+        "requirement": "required",
+        "kind": "artifact"
+      }
+    ],
     "packageType": "agent",
     "manifestVersion": 1,
     "sourceTemplateId": "media-transcript-flow",
@@ -25,7 +36,7 @@
     "consumes": [],
     "produces": [
       {
-        "extension": "@cinatra-ai/default-artifact"
+        "extension": "@cinatra-ai/text-artifact"
       }
     ]
   }
