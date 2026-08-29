@@ -9,6 +9,11 @@
       "type": "flow",
       "packageName": "@cinatra-ai/media-transcript-agent",
       "hitlScreens": [],
+      "produces": [
+        {
+          "extension": "@cinatra-ai/text-artifact"
+        }
+      ],
       "llm": {
         "preferredProvider": "gemini",
         "preferredModel": "gemini-3.5-flash",
