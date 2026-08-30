@@ -30,14 +30,18 @@
     "sourceVersionNumber": 1,
     "type": "flow",
     "riskLevel": "low",
-    "hasApprovalGates": true,
+    "hasApprovalGates": false,
     "toolAccess": [],
     "ownerOrgId": null,
     "consumes": [],
     "produces": [
       {
-        "extension": "@cinatra-ai/text-artifact"
+        "extension": "@cinatra-ai/text-artifact",
+        "objectTypeId": "@cinatra-ai/text-artifact:artifact"
       }
     ]
+  },
+  "scripts": {
+    "test": "node --test tests/*.test.mjs"
   }
 }
