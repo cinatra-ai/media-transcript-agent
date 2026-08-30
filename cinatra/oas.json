@@ -11,7 +11,8 @@
       "hitlScreens": [],
       "produces": [
         {
-          "extension": "@cinatra-ai/text-artifact"
+          "extension": "@cinatra-ai/text-artifact",
+          "objectTypeId": "@cinatra-ai/text-artifact:artifact"
         }
       ],
       "llm": {
@@ -283,7 +284,8 @@
               "extension": "@cinatra-ai/text-artifact",
               "contentFrom": "transcript",
               "declaredMime": "text/plain",
-              "titleFrom": "mediaUrl"
+              "titleFrom": "mediaUrl",
+              "objectTypeId": "@cinatra-ai/text-artifact:artifact"
             }
           }
         },
