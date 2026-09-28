@@ -69,6 +69,9 @@
       "$component_ref": "call_bridge"
     },
     {
+      "$component_ref": "transcript_summary"
+    },
+    {
       "$component_ref": "end"
     }
   ],
@@ -85,9 +88,19 @@
     },
     {
       "component_type": "ControlFlowEdge",
-      "name": "call_bridge_to_end",
+      "name": "call_bridge_to_transcript_summary",
       "from_node": {
         "$component_ref": "call_bridge"
+      },
+      "to_node": {
+        "$component_ref": "transcript_summary"
+      }
+    },
+    {
+      "component_type": "ControlFlowEdge",
+      "name": "transcript_summary_to_end",
+      "from_node": {
+        "$component_ref": "transcript_summary"
       },
       "to_node": {
         "$component_ref": "end"
@@ -190,6 +203,42 @@
         "$component_ref": "end"
       },
       "destination_input": "title"
+    },
+    {
+      "component_type": "DataFlowEdge",
+      "name": "call_bridge_text_to_transcript_summary_transcript",
+      "source_node": {
+        "$component_ref": "call_bridge"
+      },
+      "source_output": "text",
+      "destination_node": {
+        "$component_ref": "transcript_summary"
+      },
+      "destination_input": "transcript"
+    },
+    {
+      "component_type": "DataFlowEdge",
+      "name": "start_title_to_transcript_summary_title",
+      "source_node": {
+        "$component_ref": "start"
+      },
+      "source_output": "title",
+      "destination_node": {
+        "$component_ref": "transcript_summary"
+      },
+      "destination_input": "title"
+    },
+    {
+      "component_type": "DataFlowEdge",
+      "name": "start_mediaUrl_to_transcript_summary_mediaUrl",
+      "source_node": {
+        "$component_ref": "start"
+      },
+      "source_output": "mediaUrl",
+      "destination_node": {
+        "$component_ref": "transcript_summary"
+      },
+      "destination_input": "mediaUrl"
     }
   ],
   "$referenced_components": {
@@ -281,6 +330,34 @@
           "requiresApproval": false,
           "packageName": "@cinatra-ai/media-transcript-agent",
           "description": "Single ApiNode \u2192 /api/llm-bridge. Branching (YouTube URL-as-text vs file upload) happens in the bridge. The cinatra_llm block is injected by the oas-compiler (injectCinatraLlmIntoApiNodes) at compile time. The hidden StartNode inputs `title`/`description`/`kind` carry `default: \"\"` so callers can dispatch with only `mediaUrl`. The bridge schema still normalizes empty/null to undefined for the Zod media kind enum \u2014 defaults guarantee the value flows; bridge normalization handles the empty-string semantic. Strict `start_conversation(inputs=...)` validation requires defaults because the dispatcher passes StartNode inputs explicitly, while undefined StartNode inputs render to empty strings through Jinja."
+        }
+      }
+    },
+    "transcript_summary": {
+      "component_type": "OutputMessageNode",
+      "id": "transcript_summary",
+      "name": "Transcript result",
+      "inputs": [
+        {
+          "title": "transcript",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "title": "title",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "title": "mediaUrl",
+          "type": "string",
+          "default": ""
+        }
+      ],
+      "message": "{# pyagentspec-input-hint (do not remove): {{ transcript }} {{ title }} {{ mediaUrl }} #}{% if not (transcript | trim) %}No transcript came back for the media at {{ mediaUrl }}: no speech was found in it.{% elif '[unclear: entire audio is unintelligible]' in transcript %}No transcript could be written: the speech in the media at {{ mediaUrl }} could not be understood.{% elif title %}The transcript of {{ title }} was written from the media at {{ mediaUrl }}.{% else %}The transcript of the media at {{ mediaUrl }} was written.{% endif %}",
+      "metadata": {
+        "cinatra": {
+          "purpose": "plain-language-transcript-ending"
         }
       }
     },
